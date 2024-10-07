@@ -15,7 +15,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindUI()
+        bindInput()
+        bindOutput()
     }
     
     // MARK: - IBOutler
@@ -28,73 +29,55 @@ class ViewController: UIViewController {
     
     // MARK: - Bind UI
     
-    private func bindUI(){
-        // id input +--> check valid --> bullet
-        //          |
-        //          +--> button enable
-        //          |
-        // pw input +--> check valid --> bullet
+    let idInputText: BehaviorSubject<String> = BehaviorSubject(value: "")
+    let idValid: BehaviorSubject<Bool> = BehaviorSubject(value: false)
+    
+    let pwInputText: BehaviorSubject<String> = BehaviorSubject(value: "")
+    let pwValid: BehaviorSubject<Bool> = BehaviorSubject(value: false)
+    
+    private func bindInput(){
+        // input: id, pw 입력 BehaviorSubject 사용
+        idField.rx.text.orEmpty
+            .bind(to: idInputText)
+            .disposed(by: disposeBag)
         
-        // input: id, pw 입력
-        let idInputOb: Observable<String> = idField.rx.text.orEmpty.asObservable()
-        let idValidOb = idInputOb.map(checkEmailValid)
-
-        let pwInputOb: Observable<String> = pwField.rx.text.orEmpty.asObservable()
-        let pwValidOb = pwInputOb.map(checkPasswordValid)
+        //        idField.rx.text.orEmpty //  idField.rx.text.orEmpty는 idInputText에 저장되어있음 따라서
+        idInputText
+            .map(checkEmailValid)
+            .bind(to: idValid)
+            .disposed(by: disposeBag)
         
+        pwField.rx.text.orEmpty
+            .bind(to: pwInputText)
+            .disposed(by: disposeBag)
+        
+        pwInputText
+            .map(checkPasswordValid)
+            .bind(to: pwValid)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindOutput() {
         // output: 로그인버튼 enable/ id,pw 정규식 검사
-        idValidOb.subscribe(onNext: { b in
+        
+        idValid.subscribe(onNext: { b in
             self.idValidView.isHidden = b
         })
         .disposed(by: disposeBag)
         
-        pwValidOb.subscribe(onNext: { b in
+        pwValid.subscribe(onNext: { b in
             self.pwValidView.isHidden = b
         })
         .disposed(by: disposeBag)
         
-        Observable.combineLatest(idField.rx.text.orEmpty.map(checkEmailValid), pwField.rx.text.orEmpty.map(checkPasswordValid),
-            resultSelector: {s1, s2 in s1 && s2}
+        Observable.combineLatest(idValid,
+                                 pwValid,
+                                 resultSelector: { $0 && $1 }
         )
         .subscribe(onNext: { b in
             self.loginButton.isEnabled = b
         })
         .disposed(by: disposeBag)
-        
-        Observable.combineLatest(idValidOb, pwValidOb,
-            resultSelector: { $0 && $1}
-        )
-        .subscribe(onNext: { b in
-            self.loginButton.isEnabled = b
-        })
-        .disposed(by: disposeBag)
-        
-        
-//        idField.rx.text.orEmpty
-//        //            .filter { $0 != nil }
-//        //            .map { $0! } -> .orEmpty로 변경 가능
-//            .map(checkEmailValid)
-//            .subscribe(onNext: { s in
-//                self.idValidView.isHidden = s
-//            })
-//            .disposed(by: disposeBag)
-//        
-//        pwField.rx.text.orEmpty
-//            .map(checkPasswordValid)
-//            .subscribe(onNext: { s in
-//                self.pwValidView.isHidden = s
-//            })
-//            .disposed(by: disposeBag)
-//        
-//        
-//        //MARK: - combineLatest: 다른 Observable을 결합시켜 새로운 Observable을 생성해야 한다
-//        Observable.combineLatest(idField.rx.text.orEmpty.map(checkEmailValid), pwField.rx.text.orEmpty.map(checkPasswordValid),
-//            resultSelector: {s1, s2 in s1 && s2}
-//        )
-//        .subscribe(onNext: { b in
-//            self.loginButton.isEnabled = b
-//        })
-//        .disposed(by: disposeBag)
     }
     
     // MARK: - Logic
