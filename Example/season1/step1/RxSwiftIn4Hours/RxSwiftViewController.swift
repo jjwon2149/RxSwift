@@ -28,11 +28,13 @@ class RxSwiftViewController: UIViewController {
     @IBOutlet var countLabel: UILabel!
 
     // MARK: - IBAction
+    
+    var disposable: Disposable?
 
     @IBAction func onLoadImage(_ sender: Any) {
         imageView.image = nil
 
-        _ = rxswiftLoadImage(from: LARGER_IMAGE_URL)
+        disposable = rxswiftLoadImage(from: LARGER_IMAGE_URL)
             .observeOn(MainScheduler.instance)
             .subscribe({ result in
                 switch result {
@@ -50,6 +52,7 @@ class RxSwiftViewController: UIViewController {
 
     @IBAction func onCancel(_ sender: Any) {
         // TODO: cancel image loading
+        disposable?.dispose()
     }
 
     // MARK: - RxSwift
