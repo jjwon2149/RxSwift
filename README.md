@@ -132,10 +132,12 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
 }
 ```
 
-### map과 filter를 사용한 imnageUrl 불러오기.
+### map과 filter를 사용한 imnageUrl 불러오기. observeOn와 subscribeOn를 곁들인.
 
 ```
 @IBAction func exMap3() {
+    // 
+    // 
     Observable.just("800x600")
         // 비동기 작업을 위한 ConcurrentMainScheduler 로 변경
         .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
@@ -146,7 +148,7 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
         .map { $0! } // 위에서 nil체크를 하였으니 강제언래핑 해도 괜찮음.
         .map { try Data(contentsOf: $0) }
         .map { UIImage(data: $0) }
-    
+        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default))
         // UIUpdate를 위한 MainScheduler로 변경
         .observeOn(MainScheduler.instance)
         .subscribe(onNext: { image in
@@ -155,6 +157,17 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
         .disposed(by: disposeBag)
 }
 ```
+subscribeOn():
+Subscription code가 실행될 스케줄러를 바꾸는 메소드입니다. 
+기본적으로 observable의 생성은 subscribe()를 호출한 스레드에서 불립니다. 
+subscribeOn() 메서드는 observable을 생성할 스레드를 바꿀 수 있게 해줍니다.
+-> .subscribe가 호츨될때의 스케줄러를 정함
+
+observeOn():
+Observation code가 실행될 스케줄러를 바꾸는 메소드 입니다.
+값을 방출할때 스케줄러를 변경할 필요가 있다면 보통 observeOn() 메서드를 사용하여 실행 흐름을 바꿔줍니다.
+-> 바로 다음 오퍼레이터부터 스케줄러를 정해줌.
+
 
 ### Map과 FlatMap의 차이점
 Map은 Data를 Data로 변겯하고, 
