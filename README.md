@@ -1,6 +1,6 @@
 # RxSwift
 
-## step1
+## Step1
 
 rxswift install
 ```
@@ -74,7 +74,7 @@ var disposeBag: DisposeBag = DisposeBag()
 
 disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .dispose() 메소드가 존재하지 않아 새로은 disposeBag 인스턴스 주입.
 
-## step2
+## Step2
 
 ### Just
 ```
@@ -204,3 +204,8 @@ FlatMap은 Data를 Stream으로 변경한다.
 //                <#code#>
 //            }
 ```
+
+### RxCocoa
+
+
+## Step3
