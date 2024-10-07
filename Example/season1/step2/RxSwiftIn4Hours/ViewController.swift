@@ -33,6 +33,7 @@ class ViewController: UITableViewController {
                 print(arr)
             })
             .disposed(by: disposeBag)
+//        ["Hello", "World"]
     }
 
     @IBAction func exFrom1() {
@@ -41,6 +42,10 @@ class ViewController: UITableViewController {
                 print(str)
             })
             .disposed(by: disposeBag)
+//        RxSwift
+//        In
+//        4
+//        Hours
     }
 
     @IBAction func exMap1() {
@@ -68,6 +73,11 @@ class ViewController: UITableViewController {
                 print(n)
             })
             .disposed(by: disposeBag)
+//        2
+//        4
+//        6
+//        8
+//        10
     }
 
     @IBAction func exMap3() {
@@ -76,7 +86,7 @@ class ViewController: UITableViewController {
             .map { "https://picsum.photos/\($0)/?random" }
             .map { URL(string: $0) }
             .filter { $0 != nil }
-            .map { $0! }
+            .map { $0! } // 위에서 nil체크를 하였으니 강제언래핑 해도 괜찮음.
             .map { try Data(contentsOf: $0) }
             .map { UIImage(data: $0) }
             .subscribe(onNext: { image in
