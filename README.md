@@ -133,9 +133,12 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
 ```
 
 ### map과 filter를 사용한 imnageUrl 불러오기.
+
 ```
 @IBAction func exMap3() {
-    O~bservable.just("800x600")
+    Observable.just("800x600")
+        // 비동기 작업을 위한 ConcurrentMainScheduler 로 변경
+        .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
         .map { $0.replacingOccurrences(of: "x", with: "/") }
         .map { "https://picsum.photos/\($0)/?random" }
         .map { URL(string: $0) }
@@ -143,6 +146,9 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
         .map { $0! } // 위에서 nil체크를 하였으니 강제언래핑 해도 괜찮음.
         .map { try Data(contentsOf: $0) }
         .map { UIImage(data: $0) }
+    
+        // UIUpdate를 위한 MainScheduler로 변경
+        .observeOn(MainScheduler.instance)
         .subscribe(onNext: { image in
             self.imageView.image = image
         })

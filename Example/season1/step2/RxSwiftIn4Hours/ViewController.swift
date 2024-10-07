@@ -110,6 +110,8 @@ class ViewController: UITableViewController {
 
     @IBAction func exMap3() {
         Observable.just("800x600")
+            // 비동기 작업을 위한 ConcurrentMainScheduler 로 변경
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
             .map { $0.replacingOccurrences(of: "x", with: "/") }
             .map { "https://picsum.photos/\($0)/?random" }
             .map { URL(string: $0) }
@@ -117,6 +119,9 @@ class ViewController: UITableViewController {
             .map { $0! } // 위에서 nil체크를 하였으니 강제언래핑 해도 괜찮음.
             .map { try Data(contentsOf: $0) }
             .map { UIImage(data: $0) }
+        
+            // UIUpdate를 위한 MainScheduler로 변경
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { image in
                 self.imageView.image = image
             })
