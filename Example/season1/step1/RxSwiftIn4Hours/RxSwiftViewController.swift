@@ -29,12 +29,12 @@ class RxSwiftViewController: UIViewController {
 
     // MARK: - IBAction
     
-    var disposable: Disposable?
+    var disposeBag: DisposeBag = DisposeBag()
 
     @IBAction func onLoadImage(_ sender: Any) {
         imageView.image = nil
 
-        disposable = rxswiftLoadImage(from: LARGER_IMAGE_URL)
+        let disposable = rxswiftLoadImage(from: LARGER_IMAGE_URL)
             .observeOn(MainScheduler.instance)
             .subscribe({ result in
                 switch result {
@@ -48,11 +48,13 @@ class RxSwiftViewController: UIViewController {
                     break
                 }
             })
+        disposeBag.insert(disposable)
     }
 
     @IBAction func onCancel(_ sender: Any) {
         // TODO: cancel image loading
-        disposable?.dispose()
+        // disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .dispose() 메소드가 존재하지 않아 새로은 disposeBag 인스턴스 주입.
+        disposeBag = DisposeBag()
     }
 
     // MARK: - RxSwift
