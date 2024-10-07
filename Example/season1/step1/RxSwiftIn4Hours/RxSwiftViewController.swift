@@ -48,7 +48,8 @@ class RxSwiftViewController: UIViewController {
                     break
                 }
             })
-        disposeBag.insert(disposable)
+            .disposed(by: disposeBag)
+//        disposeBag.insert(disposable)
     }
 
     @IBAction func onCancel(_ sender: Any) {
