@@ -150,3 +150,6 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
 }
 ```
 
+### Map과 FlatMap의 차이점
+Map은 Data를 Data로 변겯하고, 
+FlatMap은 Data를 Stream으로 변경한다.
