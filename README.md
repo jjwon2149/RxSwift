@@ -136,8 +136,8 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
 
 ```
 @IBAction func exMap3() {
-    // 
-    // 
+    // observeOn
+    // subscribeOn
     Observable.just("800x600")
         // 비동기 작업을 위한 ConcurrentMainScheduler 로 변경
         .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
@@ -152,7 +152,7 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
         // UIUpdate를 위한 MainScheduler로 변경
         .observeOn(MainScheduler.instance)
         .subscribe(onNext: { image in
-            self.imageView.image = image
+            self.imageView.image = image // 사이드 이펙트 발생
         })
         .disposed(by: disposeBag)
 }
@@ -167,6 +167,8 @@ observeOn():
 Observation code가 실행될 스케줄러를 바꾸는 메소드 입니다.
 값을 방출할때 스케줄러를 변경할 필요가 있다면 보통 observeOn() 메서드를 사용하여 실행 흐름을 바꿔줍니다.
 -> 바로 다음 오퍼레이터부터 스케줄러를 정해줌.
+
+ 사이드 이펙트를 허용하는 곳 subscribe, do 를 허용해줌
 
 
 ### Map과 FlatMap의 차이점

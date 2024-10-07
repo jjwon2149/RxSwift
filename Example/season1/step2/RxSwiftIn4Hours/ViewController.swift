@@ -125,8 +125,9 @@ class ViewController: UITableViewController {
             // UIUpdate를 위한 MainScheduler로 변경
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { image in
-                self.imageView.image = image
+                self.imageView.image = image // 사이드 이펙트 발생
             })
             .disposed(by: disposeBag)
     }
+    // 사이드 이펙트를 허용하는 곳 subscribe, do 를 허용해줌
 }
