@@ -18,13 +18,41 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    func output(_ s : Any) -> Void {
+        print(s)
+    }
 
     @IBAction func exJust1() {
-        Observable.just("Hello World")
-            .subscribe(onNext: { str in
-                print(str)
-            })
+        Observable.from(["RxSwift", "In", "4", "Hours"])
+//            .single() // error 반환을 위함
+            .subscribe(onNext: output)
             .disposed(by: disposeBag)
+//            .subscribe { event in
+//                switch event {
+//                case .next(let str): // data가 전달되는것
+//                    print( "next: \(str)")
+//                    break
+//                case .error(let err): // error 발생  marble의 X모양
+//                    print("Error: \(err.localizedDescription)")
+//                    break
+//                case .completed: // 데이터 전송 완료 marble의 |모양
+//                    print("Complete")
+//                    break
+//                }
+//            }
+        // MARK: - Subscribe의 다른 방법
+//            .subscribe { <#String#> in
+//                <#code#>
+//            } onError: { <#any Error#> in
+//                <#code#>
+//            } onCompleted: {
+//                <#code#>
+//            } onDisposed: {
+//                <#code#>
+//            }
+
+         
     }
 
     @IBAction func exJust2() {

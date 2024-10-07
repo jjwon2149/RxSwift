@@ -153,3 +153,33 @@ disposeBag에 저장된 disposable 들을 한번에 dispose but DisposeBsg 은 .
 ### Map과 FlatMap의 차이점
 Map은 Data를 Data로 변겯하고, 
 FlatMap은 Data를 Stream으로 변경한다.
+
+### Subscribe 의 여러 방법
+```
+@IBAction func exJust1() {
+    Observable.from(["RxSwift", "In", "4", "Hours"])
+//            .single() // error 반환을 위함
+        .subscribe { event in
+            switch event {
+            case .next(let str): // data가 전달되는것
+                print( "next: \(str)")
+                break
+            case .error(let err): // error 발생  marble의 X모양
+                print("Error: \(err.localizedDescription)")
+                break
+            case .completed: // 데이터 전송 완료 marble의 |모양
+                print("Complete")
+                break
+            }
+        }
+    // MARK: - Subscribe의 다른 방법
+//            .subscribe { <#String#> in
+//                <#code#>
+//            } onError: { <#any Error#> in
+//                <#code#>
+//            } onCompleted: {
+//                <#code#>
+//            } onDisposed: {
+//                <#code#>
+//            }
+```
