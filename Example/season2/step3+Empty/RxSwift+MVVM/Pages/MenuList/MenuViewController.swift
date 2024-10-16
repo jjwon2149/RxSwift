@@ -38,8 +38,10 @@ class MenuViewController: UIViewController {
         
         viewModel.itemsCount
             .map { "\($0)" }
-            .observeOn(MainScheduler.instance)
-            .bind(to: itemCountLabel.rx.text)
+//            .catchErrorJustReturn("") // Error 발생시 빈문자열 반환.
+//            .observeOn(MainScheduler.instance)
+            .asDriver(onErrorJustReturn: "")
+            .drive(itemCountLabel.rx.text) // catchErrorJustReturn 와 메인쓰레드를 같이사용
             .disposed(by: disposeBag)
         
         viewModel.totalPrice
