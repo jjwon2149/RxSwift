@@ -7,6 +7,13 @@
 
 import Foundation
 
-struct NewsModel {
-    
+struct NewsResponse: Decodable {
+    let status: String
+    let totalResults: Int
+    let articles: [News]
+}
+
+struct News: Decodable {
+    let title: String
+    let description: String?
 }
