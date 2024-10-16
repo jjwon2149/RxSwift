@@ -28,8 +28,8 @@ class MenuViewController: UIViewController {
             .map {
                 $0.currencyKR()
             }
-            .subscribe { price in
-                self.totalPrice.text = price
+            .subscribe { [weak self] price in
+                self?.totalPrice.text = price
             }
             .disposed(by: disposeBag)
     }
