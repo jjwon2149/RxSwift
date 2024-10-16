@@ -21,7 +21,10 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.dataSource = nil
+                
         viewModel.menuObservable
+            .observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: cellId, cellType: MenuItemTableViewCell.self)) { index, item, cell in
                 cell.title.text = "\(item.name)"
                 cell.price.text = "\(item.price)"
@@ -72,6 +75,6 @@ class MenuViewController: UIViewController {
         // TODO: no selection
         // showAlert("Order Fail", "No Orders")
 //        performSegue(withIdentifier: "OrderViewController", sender: nil)
-        viewModel.totalPrice.onNext(100)
+//        viewModel.totalPrice.onNext(100)
     }
 }
