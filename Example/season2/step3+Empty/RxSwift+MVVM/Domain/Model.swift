@@ -12,3 +12,9 @@ struct MenuItem: Decodable {
     var name: String
     var price: Int
 }
+
+struct Menu: Decodable {
+    var name: String
+    var price: Int
+    var count: Int
+}
