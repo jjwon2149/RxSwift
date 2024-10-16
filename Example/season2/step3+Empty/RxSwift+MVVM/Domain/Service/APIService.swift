@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 let MenuUrl = "https://firebasestorage.googleapis.com/v0/b/rxswiftin4hours.appspot.com/o/fried_menus.json?alt=media&token=42d5cb7e-8ec4-48f9-bf39-3049e796c936"
 
@@ -27,4 +28,29 @@ class APIService {
             onComplete(.success(data))
         }.resume()
     }
+    
+    //var id: Int
+    //var name: String
+    //var price: Int
+    //var count: Int
+    // 위와같은 모델을 가지고있음 하지만 API는 name과 price를 제공함.
+    static func fetchAllMenusRx() -> Observable<Data> {
+        return Observable.create() { emitter in
+            
+            fetchAllMenus { result in
+                switch result {
+                case .success(let data):
+                    emitter.onNext(data)
+                    emitter.onCompleted()
+                case .failure(let failure):
+                    emitter.onError(failure)
+                }
+                
+            }
+            return Disposables.create()
+        }
+    }
 }
+
+
+
