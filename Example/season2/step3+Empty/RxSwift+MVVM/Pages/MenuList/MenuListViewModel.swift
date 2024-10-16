@@ -59,7 +59,7 @@ class MenuListViewModel {
                         Menu(id: menu.id,
                              name: menu.name,
                              price: menu.price,
-                             count: menu.count + increse)
+                             count: max(menu.count + increse, 0)) // -를 계속할시 음수가 되지 않기 위해.
                     } else {
                         Menu(id: menu.id,
                              name: menu.name,
