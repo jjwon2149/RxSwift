@@ -26,9 +26,13 @@ class MenuViewController: UIViewController {
         viewModel.menuObservable
             .observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: cellId, cellType: MenuItemTableViewCell.self)) { index, item, cell in
-                cell.title.text = "\(item.name)"
+                cell.title.text = item.name
                 cell.price.text = "\(item.price)"
                 cell.count.text = "\(item.count)"
+                
+                cell.onChange = { [weak self] increse in
+                    self?.viewModel.changeCount(item: item, increse: increse)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -69,12 +73,20 @@ class MenuViewController: UIViewController {
     @IBOutlet var totalPrice: UILabel!
 
     @IBAction func onClear() {
+        viewModel.clearAllItemSelections()
     }
 
     @IBAction func onOrder(_ sender: UIButton) {
         // TODO: no selection
         // showAlert("Order Fail", "No Orders")
 //        performSegue(withIdentifier: "OrderViewController", sender: nil)
-//        viewModel.totalPrice.onNext(100)
+
+        viewModel.menuObservable
+            .onNext([
+                Menu(id: 0, name: "바뀜", price: 10_000, count: 2),
+                Menu(id: 1, name: "바뀜", price: 10_000, count: 2),
+                Menu(id: 2, name: "바뀜", price: 10_000, count: 2),
+                Menu(id: 3, name: "바뀜", price: 10_000, count: 2)
+            ])
     }
 }

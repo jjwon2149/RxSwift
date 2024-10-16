@@ -26,12 +26,51 @@ class MenuListViewModel {
     
     init() {
         let menus: [Menu] = [
-            Menu(name: "튀김 1", price: 100, count: 0),
-            Menu(name: "튀김 1", price: 100, count: 0),
-            Menu(name: "튀김 1", price: 100, count: 0),
-            Menu(name: "튀김 1", price: 100, count: 0),
+            Menu(id: 0, name: "튀김 1", price: 100, count: 0),
+            Menu(id: 1, name: "튀김 2", price: 100, count: 0),
+            Menu(id: 2, name: "튀김 3", price: 100, count: 0),
+            Menu(id: 3, name: "튀김 4", price: 100, count: 0),
         ]
         
         menuObservable.onNext(menus)
+    }
+    
+    func clearAllItemSelections() {
+        _ = menuObservable
+            .map { menus in
+                menus.map { menu in
+                    Menu(id: menu.id,
+                         name: menu.name,
+                         price: menu.price,
+                         count: 0)
+                }
+            }
+            .take(1) // 1번만 사용 disposable사용 X 할수있음.
+            .subscribe(onNext: {
+                self.menuObservable.onNext( $0 )
+            })
+    }
+    
+    func changeCount(item: Menu, increse: Int) {
+        _ = menuObservable
+            .map { menus in
+                menus.map { menu in
+                    if menu.id == item.id {
+                        Menu(id: menu.id,
+                             name: menu.name,
+                             price: menu.price,
+                             count: menu.count + increse)
+                    } else {
+                        Menu(id: menu.id,
+                             name: menu.name,
+                             price: menu.price,
+                             count: menu.count)
+                    }
+                }
+            }
+            .take(1) // 1번만 사용 disposable사용 X 할수있음.
+            .subscribe(onNext: {
+                self.menuObservable.onNext( $0 )
+            })
     }
 }
