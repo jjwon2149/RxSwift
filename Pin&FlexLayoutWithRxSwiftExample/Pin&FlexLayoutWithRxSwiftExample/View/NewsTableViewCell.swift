@@ -33,8 +33,8 @@ class NewsTableViewCell: UITableViewCell {
     private func setupUI() {
         contentView.addSubview(containerView)
         containerView.flex.direction(.column).padding(10).define { flex in
-            flex.addItem(titleLabel).marginBottom(5)
-            flex.addItem(descriptionLabel)
+            flex.addItem(titleLabel).margin(10, 0, 10, 0)
+            flex.addItem(descriptionLabel).marginBottom(10)
         }
         
         titleLabel.font = UIFont.boldSystemFont(ofSize: 10)

@@ -22,7 +22,7 @@ class NewsViewController: UIViewController {
         let table = UITableView()
         table.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         table.estimatedRowHeight = 100
-        table.rowHeight = UITableView.automaticDimension
+        table.rx.setDelegate(self).disposed(by: disposeBag)
         return table
     }()
     
@@ -66,3 +66,9 @@ class NewsViewController: UIViewController {
     }
 }
 
+// MARK: - UIScrollViewDelegate
+extension NewsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        100
+    }
+}
