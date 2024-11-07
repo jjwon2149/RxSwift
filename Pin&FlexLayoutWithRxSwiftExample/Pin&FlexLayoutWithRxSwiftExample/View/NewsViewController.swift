@@ -21,7 +21,6 @@ class NewsViewController: UIViewController {
     private lazy var tableView =  {
         let table = UITableView()
         table.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
-        table.estimatedRowHeight = 100
         table.rx.setDelegate(self).disposed(by: disposeBag)
         return table
     }()
@@ -31,6 +30,8 @@ class NewsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bindViewModel()
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
